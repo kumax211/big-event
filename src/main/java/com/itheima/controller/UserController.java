@@ -3,6 +3,7 @@ package com.itheima.controller;
 import com.itheima.pojo.Result;
 import com.itheima.pojo.User;
 import com.itheima.service.UserService;
+import com.itheima.utils.JwtUtil;
 import com.itheima.utils.Md5Util;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @projectName: big-event
@@ -56,9 +60,13 @@ public class UserController {
         String md5String = Md5Util.getMD5String(password);
         //获取密码
 
-        if (md5String.equals(loginUser.getPassword())){
-          //登陆成功
-            return Result.success("Jwt 令牌");
+        if (md5String.equals(loginUser.getPassword())) {
+            //登陆成功
+            Map<String, Object> claims = new HashMap<>();
+            claims.put("id", loginUser.getId());
+            claims.put("username", loginUser.getUsername());
+            String token = JwtUtil.genToken(claims);
+            return Result.success(token);
         }
         //密码错误
         return Result.error("密码错误");
