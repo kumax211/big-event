@@ -14,7 +14,7 @@ import java.util.Map;
  * Unit test for simple App.
  */
 public class AppTest extends TestCase {
-    @Test
+
     public void testGen() {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", 1);
