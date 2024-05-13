@@ -6,10 +6,10 @@ import com.itheima.pojo.Result;
 import com.itheima.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @projectName: big-event
@@ -27,10 +27,34 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-        @PostMapping
-        public Result add(@RequestBody Category category) {
-            categoryService.add(category);
-            return Result.success();
-        }
+    @PostMapping
+    public Result add(@RequestBody @Validated Category category) {
+        categoryService.add(category);
+        return Result.success();
+    }
+
+    @GetMapping
+    public Result<List<Category>> list() {
+        List<Category> listCategory = categoryService.list();
+        return Result.success(listCategory);
+    }
+
+    @GetMapping("/detail")
+    public Result<Category> byDetail(Integer id) {
+        Category category = categoryService.byDetail(id);
+        return Result.success(category);
+    }
+
+    @PutMapping
+    public Result update(@RequestBody @Validated Category category) {
+        categoryService.update(category);
+        return Result.success();
+    }
+
+    @DeleteMapping
+    public Result delete(Integer id) {
+        categoryService.delete(id);
+        return Result.success();
+    }
 
 }
