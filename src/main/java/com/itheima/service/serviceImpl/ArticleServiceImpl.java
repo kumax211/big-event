@@ -10,6 +10,7 @@ import com.itheima.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,23 @@ public class ArticleServiceImpl implements ArticleService {
         pb.setTotal(ps.getTotal());
         pb.setItems(ps.getResult());
         return pb;
+    }
+
+    @Override
+    public Article detail(Integer id) {
+        return articleMapper.detail(id);
+    }
+
+    @Override
+    public void update(Article article) {
+        article.setUpdateTime(LocalDateTime.now());
+        article.setCreateUser(userId());
+        articleMapper.update(article);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        articleMapper.delete(id);
     }
 
     private Integer userId() {
